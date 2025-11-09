@@ -1,0 +1,38 @@
+Subject: [PATCH] Make it
+---
+Index: spksrc.spk.mk
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/spksrc.spk.mk b/spksrc.spk.mk
+--- a/spksrc.spk.mk	(revision b4c16e7612c63cb4e8f7aeb4f9258a9b79c2dd29)
++++ b/spksrc.spk.mk	(date 1759510788675)
+@@ -305,6 +305,18 @@
+ $(DSM_SCRIPTS_DIR)/%: $(filter %.sh,$(ADDITIONAL_SCRIPTS))
+ 	@$(dsm_script_copy)
+ 
++.PHONY: fix_line_endings
++fix_line_endings:
++	@$(MSG) "Normalising line endings in PLIST and scripts/"
++	@if [ -f "$(WORK_DIR)/PLIST" ]; then \
++		$(MSG) "normalizing $(WORK_DIR)/PLIST"; \
++		sed -i 's/\r$$//' "$(WORK_DIR)/PLIST" || true; \
++	fi
++	@if [ -d "$(DSM_SCRIPTS_DIR)" ]; then \
++		$(MSG) "normalizing scripts in $(DSM_SCRIPTS_DIR)"; \
++		find "$(DSM_SCRIPTS_DIR)" -type f -exec sed -i 's/\r$$//' {} \; || true; \
++	fi
++
+ # Package Icons
+ .PHONY: icons
+ icons:
+@@ -373,7 +385,7 @@
+ SPK_CONTENT += LICENSE
+ endif
+ 
+-$(SPK_FILE_NAME): $(WORK_DIR)/package.tgz $(WORK_DIR)/INFO info-checksum icons service $(DSM_SCRIPTS) wizards $(DSM_LICENSE) conf
++$(SPK_FILE_NAME): $(WORK_DIR)/package.tgz $(WORK_DIR)/INFO info-checksum icons service $(DSM_SCRIPTS) wizards $(DSM_LICENSE) conf fix_line_endings
+ 	$(create_target_dir)
+ 	(cd $(WORK_DIR) && tar cpf $@ --group=root --owner=root $(SPK_CONTENT))
+ 

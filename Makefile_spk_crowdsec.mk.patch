@@ -1,0 +1,21 @@
+Subject: [PATCH] Make it
+---
+Index: Makefile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Makefile b/Makefile
+--- a/Makefile	(revision fa3511f0fed57f9d112716d1fd01fc987b65ae09)
++++ b/Makefile	(date 1759443227032)
+@@ -32,7 +32,7 @@
+ 
+ include ../../mk/spksrc.common.mk
+ 
+-ifeq ($(call version_ge, ${TCVERSION}, 7.0),1)
++ifneq (,$(call version_ge, ${TCVERSION}, 7.0 7.1 7.2),1)
+ 	CONF_DIR = src/conf_7
+ 	SPK_GROUP = sc-crowdsec
+ 	SPK_USER = crowdsec
+
+ 

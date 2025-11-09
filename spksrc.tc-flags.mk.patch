@@ -1,0 +1,19 @@
+Subject: [PATCH] Make it
+---
+Index: spksrc.tc-flags.mk
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>US-ASCII
+===================================================================
+diff --git a/spksrc.tc-flags.mk b/spksrc.tc-flags.mk
+--- a/spksrc.tc-flags.mk	(revision 2109adb046fb4bd2dcb6626fc86b943440c89ebd)
++++ b/spksrc.tc-flags.mk	(date 1758898758001)
+@@ -22,7 +22,7 @@
+
+ ifeq ($(strip $(TC_DIST_SITE_URL)),)
+ TC_DIST_SITE_URL = https://sourceforge.net/projects/dsgpl/files/Tool%20Chain/$(TC_TYPE)%20$(TC_VERS)%20Tool%20Chains/
+-ifeq ($(TC_VERS),7.0)
++ifneq (,$(filter $(TC_VERS),7.0 7.2))
+ TC_DIST_SITE_URL = https://global.download.synology.com/download/ToolChain/toolchain/$(TC_VERS)-$(TC_BUILD)/
+ endif
+ endif

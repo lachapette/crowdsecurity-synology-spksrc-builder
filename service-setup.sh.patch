@@ -1,0 +1,30 @@
+Subject: [PATCH] Crowdsec multiple server setup API patches
+---
+Index: service-setup.sh
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/service-setup.sh b/service-setup.sh
+--- a/service-setup.sh	(revision 63490335ba7541b9636f718e3d710148be5342fe)
++++ b/service-setup.sh	(date 1760255285275)
+@@ -41,9 +42,6 @@
+ SVC_BACKGROUND=y
+ SVC_WRITE_PID=y
+ 
+-LAPI_URL="127.0.0.1"
+-LAPI_PORT="8888"
+-
+ SERVICE_COMMAND="${CROWDSEC} -c ${CFG_FILE}"
+ 
+ ##LAPI_PORT_TITLE = $(DISPLAY_NAME) (API)
+@@ -149,9 +147,6 @@
+ 
+ 		sed -e "s,credentials_path: /etc/crowdsec/local_api_credentials.yaml,credentials_path: ${LOCALAPI},g" -i "${CFG_FILE}"
+ 		sed -e "s,credentials_path: /etc/crowdsec/online_api_credentials.yaml,credentials_path: ${ONLINEAPI},g" -i "${CFG_FILE}"
+-
+-		sed -i "s,^\(\s*listen_uri\s*:\s*\).*\$,\1${LAPI_URL}:${LAPI_PORT}," "${CFG_FILE}"
+-		sed -i "s,^\(\s*url\s*:\s*\).*\$,\1http://${LAPI_URL}:${LAPI_PORT}," "${LOCALAPI}"
+ 	fi
+ 
+ 	if grep -q "login:" "${LOCALAPI}"; then
