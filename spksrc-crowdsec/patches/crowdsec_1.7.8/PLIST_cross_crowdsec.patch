@@ -1,0 +1,76 @@
+Subject: [PATCH] PLIST
+---
+Index: PLIST
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>US-ASCII
+===================================================================
+diff --git a/PLIST b/PLIST
+--- a/PLIST	(revision b1277e882f23843d80d3b3dc10ccea81ed1badf5)
++++ b/PLIST	(date 1759338994063)
+@@ -2,19 +2,54 @@
+ rsc:etc/crowdsec/config.yaml
+ rsc:etc/crowdsec/dev.yaml
+ rsc:etc/crowdsec/local_api_credentials.yaml
++rsc:etc/crowdsec/notifications/dummy.yaml
++rsc:etc/crowdsec/notifications/email.yaml
++rsc:etc/crowdsec/notifications/file.yaml
++rsc:etc/crowdsec/notifications/http.yaml
++rsc:etc/crowdsec/notifications/sentinel.yaml
++rsc:etc/crowdsec/notifications/slack.yaml
++rsc:etc/crowdsec/notifications/splunk.yaml
+ rsc:etc/crowdsec/online_api_credentials.yaml
+-rsc:etc/crowdsec/patterns/*
++rsc:etc/crowdsec/patterns/aws
++rsc:etc/crowdsec/patterns/bacula
++rsc:etc/crowdsec/patterns/bro
++rsc:etc/crowdsec/patterns/cowrie_honeypot
++rsc:etc/crowdsec/patterns/exim
++rsc:etc/crowdsec/patterns/firewalls
++rsc:etc/crowdsec/patterns/haproxy
++rsc:etc/crowdsec/patterns/java
++rsc:etc/crowdsec/patterns/junos
++rsc:etc/crowdsec/patterns/linux-syslog
++rsc:etc/crowdsec/patterns/mcollective
++rsc:etc/crowdsec/patterns/modsecurity
++rsc:etc/crowdsec/patterns/mongodb
++rsc:etc/crowdsec/patterns/mysql
++rsc:etc/crowdsec/patterns/nagios
++rsc:etc/crowdsec/patterns/nginx
++rsc:etc/crowdsec/patterns/paths
++rsc:etc/crowdsec/patterns/postgresql
++rsc:etc/crowdsec/patterns/rails
++rsc:etc/crowdsec/patterns/redis
++rsc:etc/crowdsec/patterns/ruby
++rsc:etc/crowdsec/patterns/smb
++rsc:etc/crowdsec/patterns/ssh
+ rsc:etc/crowdsec/patterns/tcpdump
+ rsc:etc/crowdsec/profiles.yaml
+ rsc:etc/crowdsec/simulation.yaml
+ rsc:etc/crowdsec/user.yaml
+-rsc:etc/crowdsec/notifications/email.yaml
+-rsc:etc/crowdsec/notifications/http.yaml
+-rsc:etc/crowdsec/notifications/slack.yaml
+-rsc:etc/crowdsec/notifications/splunk.yaml
+-lib:usr/lib/crowdsec/plugins/notification-email
+-lib:usr/lib/crowdsec/plugins/notification-http
+-lib:usr/lib/crowdsec/plugins/notification-slack
+-lib:usr/lib/crowdsec/plugins/notification-splunk
++lib:usr/lib/crowdsec/cmd/notification-dummy
++lib:usr/lib/crowdsec/cmd/notification-email
++lib:usr/lib/crowdsec/cmd/notification-file
++lib:usr/lib/crowdsec/cmd/notification-http
++lib:usr/lib/crowdsec/cmd/notification-sentinel
++lib:usr/lib/crowdsec/cmd/notification-slack
++lib:usr/lib/crowdsec/cmd/notification-splunk
++bin:usr/sbin/crowdsec
+ bin:usr/sbin/cscli
+-bin:usr/sbin/crowdsec
++bin:usr/sbin/notification-dummy
++bin:usr/sbin/notification-email
++bin:usr/sbin/notification-file
++bin:usr/sbin/notification-http
++bin:usr/sbin/notification-sentinel
++bin:usr/sbin/notification-slack
++bin:usr/sbin/notification-splunk
+\ No newline at end of file
