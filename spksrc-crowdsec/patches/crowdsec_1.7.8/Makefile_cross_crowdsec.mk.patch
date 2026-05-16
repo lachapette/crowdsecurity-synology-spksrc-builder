@@ -1,0 +1,56 @@
+Subject: [PATCH] Makefile cross crowdsec
+---
+Index: Makefile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>US-ASCII
+===================================================================
+diff --git a/Makefile b/Makefile
+--- a/Makefile	(revision 32e2d2b5a920958bafab7f0b3dabf2ae7fcdb4c7)
++++ b/Makefile	(date 1759182895840)
+@@ -58,6 +58,13 @@
+ 	install -m 755 -d $(STAGING_INSTALL_PREFIX)/usr/sbin
+ 	install -m 551 $(GO_SRC_DIR)/cmd/crowdsec/crowdsec $(STAGING_INSTALL_PREFIX)/usr/sbin/crowdsec
+ 	install -m 551 $(GO_SRC_DIR)/cmd/crowdsec-cli/cscli $(STAGING_INSTALL_PREFIX)/usr/sbin/cscli
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-dummy/notification-dummy $(STAGING_INSTALL_PREFIX)/usr/sbin/notification-dummy
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-email/notification-email $(STAGING_INSTALL_PREFIX)/usr/sbin/notification-email
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-file/notification-file $(STAGING_INSTALL_PREFIX)/usr/sbin/notification-file
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-http/notification-http $(STAGING_INSTALL_PREFIX)/usr/sbin/notification-http
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-sentinel/notification-sentinel $(STAGING_INSTALL_PREFIX)/usr/sbin/notification-sentinel
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-slack/notification-slack $(STAGING_INSTALL_PREFIX)/usr/sbin/notification-slack
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-splunk/notification-splunk $(STAGING_INSTALL_PREFIX)/usr/sbin/notification-splunk
+ 	@$(MSG) "Copying config files"
+ 	install -m 755 -d $(STAGING_INSTALL_PREFIX)/etc/crowdsec
+ 	install -m 644 $(GO_SRC_DIR)/config/config.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/config.yaml
+@@ -76,16 +83,22 @@
+ 	install -m 775 -d $(STAGING_INSTALL_PREFIX)/etc/crowdsec/bouncers
+ 	cp -f $(GO_SRC_DIR)/config/patterns/* $(STAGING_INSTALL_PREFIX)/etc/crowdsec/patterns/
+ 	@$(MSG) "Copying plugins files"
+-	install -m 755 -d $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/plugins
+-	install -m 551 $(GO_SRC_DIR)/plugins/notifications/slack/notification-slack $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/plugins/
+-	install -m 551 $(GO_SRC_DIR)/plugins/notifications/http/notification-http $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/plugins/
+-	install -m 551 $(GO_SRC_DIR)/plugins/notifications/splunk/notification-splunk $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/plugins/
+-	install -m 551 $(GO_SRC_DIR)/plugins/notifications/email/notification-email $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/plugins/
++	install -m 755 -d $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/cmd
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-dummy/notification-dummy $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/cmd/
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-email/notification-email $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/cmd/
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-file/notification-file $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/cmd/
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-http/notification-http $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/cmd/
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-sentinel/notification-sentinel $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/cmd/
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-slack/notification-slack $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/cmd/
++	install -m 551 $(GO_SRC_DIR)/cmd/notification-splunk/notification-splunk $(STAGING_INSTALL_PREFIX)/usr/lib/crowdsec/cmd/
+ 	install -m 775 -d $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications
+-	install -m 664 $(GO_SRC_DIR)/plugins/notifications/slack/slack.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/slack.yaml
+-	install -m 664 $(GO_SRC_DIR)/plugins/notifications/http/http.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/http.yaml
+-	install -m 664 $(GO_SRC_DIR)/plugins/notifications/splunk/splunk.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/splunk.yaml
+-	install -m 664 $(GO_SRC_DIR)/plugins/notifications/email/email.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/email.yaml
++	install -m 664 $(GO_SRC_DIR)/cmd/notification-dummy/dummy.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/dummy.yaml
++	install -m 664 $(GO_SRC_DIR)/cmd/notification-email/email.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/email.yaml
++	install -m 664 $(GO_SRC_DIR)/cmd/notification-file/file.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/file.yaml
++	install -m 664 $(GO_SRC_DIR)/cmd/notification-http/http.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/http.yaml
++	install -m 664 $(GO_SRC_DIR)/cmd/notification-sentinel/sentinel.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/sentinel.yaml
++	install -m 664 $(GO_SRC_DIR)/cmd/notification-slack/slack.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/slack.yaml
++	install -m 664 $(GO_SRC_DIR)/cmd/notification-splunk/splunk.yaml $(STAGING_INSTALL_PREFIX)/etc/crowdsec/notifications/splunk.yaml
+ 	@$(MSG) "Creating directories"
+ 	install -m 775 -d $(STAGING_INSTALL_PREFIX)/share/crowdsec
+ 	install -m 755 -d $(STAGING_INSTALL_PREFIX)/etc/crowdsec/bouncers
