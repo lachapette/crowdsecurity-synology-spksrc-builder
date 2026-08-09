@@ -5,9 +5,14 @@
 
 PATH="${SYNOPKG_PKGDEST}/sbin:${SYNOPKG_PKGDEST}/usr/sbin:${PATH}"
 
+# Load common package variables
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PKG_DIR="$(dirname "${SCRIPT_DIR}")"
+source "${PKG_DIR}/src/common"
+
 # Package
-PACKAGE="crowdsec"
-DNAME="CrowdSec"
+PACKAGE="${PACKAGE_NAME}"
+DNAME="${DISPLAY_NAME}"
 PKG_DIR="/var/packages/${PACKAGE}"
 
 ETC_DIR="${PKG_DIR}/etc"
@@ -36,8 +41,8 @@ DB_PATH="${DATA_DIR}/crowdsec.db"
 
 # Service
 
-SVC_CWD="${INSTALL_DIR}"
-HOME="${INSTALL_DIR}"
+SVC_CWD="${HOME_DIR}"
+HOME="${HOME_DIR}"
 SVC_BACKGROUND=y
 SVC_WRITE_PID=y
 
@@ -190,31 +195,23 @@ service_clean ()
 	fi
 }
 
-fix_runas_root ()
-{
-	sed -i "s/package/root/" "/var/packages/${PACKAGE}/conf/privilege"
-}
-
 service_postinst ()
 {
 #	if [ "${SYNOPKG_PKG_STATUS}" == "INSTALL" ]; then	# Create data dir & permissions if needed
 		service_prepare
 #	fi
-	fix_runas_root
 	patch_nginx
 }
 
 service_postupgrade ()
 {
 	service_prepare
-	fix_runas_root
 	patch_nginx
 }
 
 service_prestart ()
 {
 	service_prepare
-	fix_runas_root
 	patch_nginx
 }
 

@@ -6,7 +6,7 @@ SHELL_OPTION=$1
 CROWDSEC_VERS=$2
 USAGE_INFOS="\nUsage: $0 {prepare | build | clean} [crowdsec_version]\n\nSupported CrowdSec versions: 1.6.11, 1.7.8\nExample: $0 prepare 1.7.8"
 
-set -euo pipefail
+#set -euo pipefail
 
 # Validate CrowdSec version
 if [ -n "${CROWDSEC_VERS}" ] && [ "${SHELL_OPTION}" != "clean" ]; then
@@ -21,7 +21,6 @@ if [ -n "${CROWDSEC_VERS}" ] && [ "${SHELL_OPTION}" != "clean" ]; then
   esac
 fi
 
-SYNO_NETWORK='synology_network'
 PROJECT_BUILDER=$(pwd)
 ROOT_DIR=$(dirname "${PROJECT_BUILDER}")
 CROWDSEC_PROJECT=spksrc-crowdsec
@@ -61,11 +60,6 @@ clean_docker_synology() {
 prepare_docker_synology_toolkit() {
   sudo apt install -y dos2unix
 
-  docker network ls | grep "${SYNO_NETWORK}"
-  if [ $? -eq 1 ]; then
-    docker network create "${SYNO_NETWORK}"
-  fi
-
   cd "${ROOT_DIR}"
   echo "==> Install SDK Toolkit Synology in ${TOOLKIT_DIR}"
   if [ -d "./${CROWDSEC_PROJECT}/.git" ]; then
@@ -85,6 +79,15 @@ prepare_docker_synology_toolkit() {
   cp -r "${PROJECT_BUILDER}/spksrc-crowdsec/patches/"* "${TOOLKIT_DIR}/patches/" 2>/dev/null || true
   cp "${PROJECT_BUILDER}/spksrc-crowdsec/toolchain/syno-${ARCH}-${DSM_VER}/Makefile" "${TOOLKIT_DIR}/toolchain/syno-${ARCH}-${DSM_VER}/Makefile" 2>/dev/null || true
 
+  # Copy DSM package configuration files (privilege, resource, info)
+  mkdir -p "${TOOLKIT_DIR}/spk/crowdsec/src/conf_7"
+  cp "${PROJECT_BUILDER}/CrowdsecPackage/src/conf_72/privilege" "${TOOLKIT_DIR}/spk/crowdsec/src/conf_7/privilege" 2>/dev/null || true
+  cp "${PROJECT_BUILDER}/CrowdsecPackage/src/conf_72/resource" "${TOOLKIT_DIR}/spk/crowdsec/src/conf_7/resource" 2>/dev/null || true
+  cp "${PROJECT_BUILDER}/CrowdsecPackage/src/conf_72/info" "${TOOLKIT_DIR}/spk/crowdsec/src/conf_7/info" 2>/dev/null || true
+  
+  # Copy fixed service-setup.sh with corrected permissions handling
+  cp "${PROJECT_BUILDER}/CrowdsecPackage/scripts/service-setup.sh" "${TOOLKIT_DIR}/spk/crowdsec/src/service-setup.sh" 2>/dev/null || true
+
   # Fix sponge command in spksrc.service.mk (not available in container)
   sed -i 's|sponge \$@|{ cat > \$@.tmp \&\& mv \$@.tmp \$@; }|g' ./${CROWDSEC_PROJECT}/mk/spksrc.service.mk
 
@@ -96,6 +99,8 @@ prepare_docker_synology_toolkit() {
   patch -p1 -d ./${CROWDSEC_PROJECT}/mk < "${PATCHES_SDK_DIR}/spksrc.checksum.mk.patch"
   patch -p1 -d ./${CROWDSEC_PROJECT}/mk < "${PATCHES_SDK_DIR}/spksrc.tc-flags.mk.patch"
   patch -p1 -d ./${CROWDSEC_PROJECT}/spk/crowdsec < "${PATCHES_SDK_DIR}/Makefile_spk_crowdsec.mk.patch"
+  
+
   
   # Set CrowdSec version in Makefiles
   sed -i "s|\(SPK_VERS = \)[0-9]*\.[0-9]*\.[0-9]*|\1${CROWDSEC_VERS}|g" ./${CROWDSEC_PROJECT}/spk/crowdsec/Makefile
@@ -170,8 +175,8 @@ prepare_docker_synology_toolkit() {
   fi
 
   echo "==> Fix GO parameters to use ${GO_VERSION_NATIVE} in ./${CROWDSEC_PROJECT}/native/go/Makefile"
-  sed -i "s|\(PKG_VERS = \)[\.0-9]*|\1${GO_VERSION_NATIVE}|g" ./${CROWDSEC_PROJECT}/native/go/Makefile
-  sed -i "s|\(PKG_DIST_SITE = \)\.*$|\1${GO_DOWNLOAD_URL}|g" ./${CROWDSEC_PROJECT}/native/go/Makefile
+  sed -i "s|\(PKG_VERS = \)[.0-9]*|\1${GO_VERSION_NATIVE}|g" ./${CROWDSEC_PROJECT}/native/go/Makefile
+  sed -i "s|\(PKG_DIST_SITE = \)[^ ]*|\1${GO_DOWNLOAD_URL}|g" ./${CROWDSEC_PROJECT}/native/go/Makefile
 
   # Clean default CrowdSec patches that may cause issues
   rm -f "./${CROWDSEC_PROJECT}/cross/crowdsec/patches/"* 2>/dev/null || true
@@ -215,7 +220,7 @@ prepare_docker_synology_toolkit() {
   # Clean PLIST in work directory too (remove CR)
   sed -i 's/\r$//' ./${CROWDSEC_PROJECT}/spk/crowdsec/work-denverton-7.3/PLIST 2>/dev/null || true
 
-  docker run -td --privileged --cpuset-cpus=6 --stop-signal=SIGPWR --hostname=${CROWDSEC_PROJECT} --net="${SYNO_NETWORK}" --name=${CROWDSEC_PROJECT} \
+  docker run -td --privileged --cpuset-cpus=6 --stop-signal=SIGPWR --hostname=${CROWDSEC_PROJECT} --name=${CROWDSEC_PROJECT} \
     -v "${TOOLKIT_DIR}":"${SDK_WORK_DIR}" \
     -e TZ=Europe/Paris \
     ${DOCKER_IMAGE}

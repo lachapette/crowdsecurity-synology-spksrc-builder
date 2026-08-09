@@ -4,14 +4,18 @@
       "usr/sbin/crowdsec",
       "usr/sbin/cscli"
     ],
-    "etc": [
-      "etc/crowdsec"
+    "conf": [
+      "conf/"
     ],
-    "share": [
-      "etc/data"
+    "etc": [
+      "etc/crowdsec",
+      "etc/hub"
     ],
     "lib": [
       "usr/lib/crowdsec"
+    ],
+    "share": [
+      "etc/data"
     ]
   }
 }
